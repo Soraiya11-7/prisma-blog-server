@@ -117,7 +117,32 @@ const getAllPost = async ({
 
 }
 
+const getPostById = async (postId: string) => {
+
+    //transaction roll back
+    return await prisma.$transaction(async (tx) => {
+        //increment view count
+        await tx.post.update({
+            where: {
+                id: postId
+            },
+            data: {
+                views: {
+                    increment: 1
+                }
+            }
+        })
+        const postData = await tx.post.findUnique({
+            where: {
+                id: postId
+            }
+        })
+        return postData
+    })
+}
+
 export const postService = {
     createPost,
-    getAllPost
+    getAllPost,
+    getPostById
 }
