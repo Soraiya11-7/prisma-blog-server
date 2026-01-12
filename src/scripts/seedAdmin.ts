@@ -22,11 +22,6 @@ async function seedAdmin() {
             throw new Error("User already exists!!");
         }
 
-        // Update your fetch call to log the response body
-
-
-
-
         const signUpAdmin = await fetch("http://localhost:5000/api/auth/sign-up/email", {
             method: "POST",
             headers: {
@@ -57,4 +52,6 @@ async function seedAdmin() {
     }
 }
 
-seedAdmin()
+seedAdmin();
+
+//npm run seed:admin
