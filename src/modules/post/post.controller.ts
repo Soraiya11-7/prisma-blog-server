@@ -1,14 +1,16 @@
 import { Request, Response } from "express";
-
-import { PostStatus } from "../../../generated/prisma/enums";
 import { postService } from "./post.service";
-// import paginationSortingHelper from "../../helpers/paginationSortingHelper";
+
 
 const createPost = async (req: Request, res: Response) => {
     try {
-        console.log(req, res);
-
-        const result = await postService.createPost(req.body)
+        const user = req.user;
+        if (!user) {
+            return res.status(400).json({
+                error: "Unauthorized!",
+            })
+        }
+        const result = await postService.createPost(req.body, user.id as string)
         res.status(201).json(result)
     } catch (e) {
         res.status(400).json({
@@ -17,8 +19,6 @@ const createPost = async (req: Request, res: Response) => {
         })
     }
 }
-
-
 
 export const PostController = {
     createPost
